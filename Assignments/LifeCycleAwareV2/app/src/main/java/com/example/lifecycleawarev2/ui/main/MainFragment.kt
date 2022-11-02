@@ -11,36 +11,42 @@ import com.example.lifecycleawarev2.R
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
 import com.example.lifecycleawarev2.databinding.ActivityMainBinding
+import com.example.lifecycleawarev2.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
 
-    private lateinit var _binding: ActivityMainBinding
+    private lateinit var _binding: FragmentMainBinding
     private val binding get() = _binding!!
+    private lateinit var viewModel: MainViewModel
 
     companion object {
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        // TODO: Use the ViewModel
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ActivityMainBinding.inflate(inflater, container, false)
+
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         lifecycle.addObserver(DemoObserver())
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         val resultObserver = Observer<String> { result ->
-            viewModel.setData(lifecycle.currentState.name)
+            binding.eventText.text = result.toString()
         }
-
-        viewModel.getResult().observe(viewLifecycleOwner, resultObserver)
-
+        viewModel.getStatus().observe(viewLifecycleOwner, resultObserver)
     }
+
 }

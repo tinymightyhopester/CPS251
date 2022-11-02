@@ -5,15 +5,16 @@ import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
 
-    private var eventText = ""
-    private var result: MutableLiveData<String> = MutableLiveData()
-
-    fun setData(value: String){
-        this.eventText = this.eventText+"\n"+value
-        result.value = eventText
+    companion object{
+        private var result: MutableLiveData<String> = MutableLiveData()
+        private var msg = ""
+        fun addResult(status: String) {
+            msg += status
+            result.value = msg
+        }
     }
 
-    fun getResult(): MutableLiveData<String> {
+    fun getStatus(): MutableLiveData<String>{
         return result
     }
 
